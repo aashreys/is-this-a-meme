@@ -1,4 +1,4 @@
-# Is This A Meme? 💁🏻 🦋
+# Is This A Meme? 💁🏻🦋
 
 A meme generator plugin for Figma and FigJam. Import memes from all over the internet, add your captions, and share it far and wide.
 
