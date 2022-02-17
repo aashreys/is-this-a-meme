@@ -6,4 +6,6 @@ A meme generator plugin for Figma and FigJam. Import memes from all over the int
 
 # Contributors
 
-[Wesley Shang](https://wesleyshang.com) - Told me about the Tipping Man emoji to use in the title of this plugin. ![swedish_chef](https://user-images.githubusercontent.com/6137765/154440551-26952026-0066-40ec-9a06-1b08c7591fd5.jpg)
+[Wesley Shang](https://wesleyshang.com) - Told me about the Tipping Man emoji to use in the title of this plugin. 
+
+![swedish_chef](https://user-images.githubusercontent.com/6137765/154440551-26952026-0066-40ec-9a06-1b08c7591fd5.jpg)
