@@ -10,7 +10,7 @@ import {
 import { emit } from '@create-figma-plugin/utilities'
 import { h } from 'preact'
 import { useCallback, useState } from 'preact/hooks'
-import { searchMeme } from './imgflip/search_meme'
+import { ImgFlip } from './meme_providers/imgflip'
 
 import { CloseHandler, CreateRectanglesHandler } from './types'
 
@@ -19,8 +19,13 @@ function Plugin() {
   const [countString, setCountString] = useState('5')
   const handleCreateRectanglesButtonClick = useCallback(
     function () {
-      searchMeme('is this a')
+      const imgflip = new ImgFlip();
+      imgflip.searchMeme('is this a')
       .then((memes) => console.log(memes))
+
+      imgflip.getPopularMemes()
+      .then((memes) => console.log(memes))
+
       // if (count !== null) {
       //   emit<CreateRectanglesHandler>('CREATE_RECTANGLES', count)
       // }
