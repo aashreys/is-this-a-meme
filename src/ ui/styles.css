@@ -1,0 +1,29 @@
+.memeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 8px;
+}
+
+.memeContainer {
+   display: block;
+   aspect-ratio: 1;
+}
+
+.memeContainer :hover {
+  display: block;
+  aspect-ratio: 1;
+  background: #eaeaea;
+}
+
+.memeImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.searchContainer {
+  display: block;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+

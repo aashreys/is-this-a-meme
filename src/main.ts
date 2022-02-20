@@ -1,31 +1,32 @@
-import { once, showUI } from '@create-figma-plugin/utilities'
+import { on, setRelaunchButton, showUI } from '@create-figma-plugin/utilities'
+import { Meme } from './models/meme'
 
-import { CloseHandler, CreateRectanglesHandler } from './types'
+export const EVENT_MEME_SEND = 'event_meme_send'
 
 export default function () {
-  once<CreateRectanglesHandler>('CREATE_RECTANGLES', function (count: number) {
-    const nodes: Array<SceneNode> = []
-    for (let i = 0; i < count; i++) {
-      const rect = figma.createRectangle()
-      rect.x = i * 150
-      rect.fills = [
-        {
-          type: 'SOLID',
-          color: { r: 1, g: 0.5, b: 0 }
-        }
-      ]
-      figma.currentPage.appendChild(rect)
-      nodes.push(rect)
-    }
-    figma.currentPage.selection = nodes
-    figma.viewport.scrollAndZoomIntoView(nodes)
-    figma.closePlugin()
-  })
-  once<CloseHandler>('CLOSE', function () {
-    figma.closePlugin()
-  })
   showUI({
-    width: 240,
-    height: 137
+    width: 400,
+    height: 500
   })
+  setRelaunchButton(figma.root, 'main')
+
+  on(EVENT_MEME_SEND, (data) => processMemeSendEvent(data))
+}
+
+function processMemeSendEvent(data: any) {
+  const meme: Meme = data.meme
+  const bytes = data.bytes
+  console.log('meme received: ' + meme.name)
+  const rect: RectangleNode = figma.createRectangle()
+  rect.resize(1024, 1024)
+  const newFills = []
+  
+
+  const imagePaint: ImagePaint = {
+    type: "IMAGE",
+    scaleMode: "FIT",
+    imageHash: figma.createImage(bytes).hash
+  }
+  newFills.push(imagePaint)
+  rect.fills = newFills
 }

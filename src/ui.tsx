@@ -1,71 +1,75 @@
 import {
-  Button,
-  Columns,
   Container,
+  IconSearch32,
+  LoadingIndicator,
+  MiddleAlign,
   render,
-  Text,
-  TextboxNumeric,
-  VerticalSpace
+  Textbox
 } from '@create-figma-plugin/ui'
-import { emit } from '@create-figma-plugin/utilities'
-import { h } from 'preact'
-import { useCallback, useState } from 'preact/hooks'
+import { Component, Fragment, h } from 'preact'
+import { MemesGrid } from './ ui/memes_grid'
+import styles from './ ui/styles.css'
 import { ImgFlip } from './meme_providers/imgflip'
+import { Meme } from './models/meme'
 
-import { CloseHandler, CreateRectanglesHandler } from './types'
+class UI extends Component<any, any> {
 
-function Plugin() {
-  const [count, setCount] = useState<number | null>(5)
-  const [countString, setCountString] = useState('5')
-  const handleCreateRectanglesButtonClick = useCallback(
-    function () {
-      const imgflip = new ImgFlip();
-      imgflip.searchMeme('is this a')
-      .then((memes) => console.log(memes))
+  imgflip = new ImgFlip()
+  popularMemes: Meme[] = []
 
-      imgflip.getPopularMemes()
-      .then((memes) => console.log(memes))
+  constructor(props: any) {
+    super(props)
+    this.state = {
+      query: '',
+      memes: []
+    }
+    this.fetchPopularMemes();
+  }
 
-      // if (count !== null) {
-      //   emit<CreateRectanglesHandler>('CREATE_RECTANGLES', count)
-      // }
-      // var request = new XMLHttpRequest()
-      // // This link has random lorem ipsum text
-      // request.open('GET', 'https://cors-anywhere.herokuapp.com/https://imgflip.com/search?q=is+this+a+')
-      // request.responseType = 'text'
-      // request.onload = () => {
-      //   console.log(request.response)
-      //   // window.parent.postMessage({pluginMessage: request.response}, '*')
-      // };
-      // request.send()
-    },
-    [count]
-  )
-  const handleCloseButtonClick = useCallback(function () {
-    emit<CloseHandler>('CLOSE')
-  }, [])
-  return (
-    <Container>
-      <VerticalSpace space="large" />
-      <Text muted>Count</Text>
-      <VerticalSpace space="small" />
-      <TextboxNumeric
-        onNumericValueInput={setCount}
-        onValueInput={setCountString}
-        value={countString}
-      />
-      <VerticalSpace space="extraLarge" />
-      <Columns space="extraSmall">
-        <Button fullWidth onClick={handleCreateRectanglesButtonClick}>
-          Search
-        </Button>
-        <Button fullWidth onClick={handleCloseButtonClick} secondary>
-          Close
-        </Button>
-      </Columns>
-      <VerticalSpace space="small" />
-    </Container>
-  )
+  fetchPopularMemes() {
+    this.imgflip.getPopularMemes()
+    .then((memes) => {
+      this.popularMemes = memes
+      this.setMemes(this.popularMemes)
+    })
+  }
+
+  searchForMemes(query: string) {
+    this.imgflip.searchMeme(query)
+    .then((memes) => {
+      this.setMemes(memes)
+    })
+  }
+
+  onSearchClear() {
+    this.setMemes(this.popularMemes)
+  }
+
+  setMemes(memes: Meme[]) {
+    this.setState(prevState => ({
+      ...prevState,
+      memes: memes
+    }))
+  }
+
+  render(props: any, state: any) {
+    return (
+      <Container>
+        <div class={styles.searchContainer} >
+          <Textbox icon={<IconSearch32 />} placeholder="Search memes..." value={state.query} />
+        </div>
+        <MemesGrid memes={state.memes} />
+      </Container>
+    )
+  }
+  
+}
+
+function Plugin(props: any) {
+
+  return ( <UI /> )
+
 }
 
 export default render(Plugin)
+
