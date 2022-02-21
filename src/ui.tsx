@@ -10,7 +10,7 @@ import { Component, Fragment, h } from 'preact'
 import { MemesGrid } from './ ui/memes_grid'
 import styles from './ ui/styles.css'
 import { ImgFlip } from './meme_providers/imgflip'
-import { Meme } from './models/meme'
+import { Meme } from './models/models'
 
 class UI extends Component<any, any> {
 

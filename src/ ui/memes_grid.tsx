@@ -1,5 +1,5 @@
 import { Component, h } from "preact"
-import { Meme } from "../models/meme"
+import { Meme } from "../models/models"
 import { MemeContainer } from "./meme_container"
 import styles from "./styles.css"
 

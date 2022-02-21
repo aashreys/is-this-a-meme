@@ -1,4 +1,4 @@
-import { Meme } from "../models/meme";
+import { Meme } from "../models/models";
 
 export interface MemeProvider {
 

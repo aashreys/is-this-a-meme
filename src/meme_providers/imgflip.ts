@@ -1,5 +1,5 @@
 import cheerio from "cheerio"
-import { Meme } from "../models/meme";
+import { Meme } from "../models/models";
 import { MemeProvider } from "./ meme_provider";
 
 const CORS_PROXY = "https://is-this-a-meme.aashreys.workers.dev/?"

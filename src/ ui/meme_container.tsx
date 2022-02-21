@@ -1,7 +1,7 @@
 import { resolve } from "node:path/win32";
 import { Component, createRef, h} from "preact";
 import { EVENT_MEME_SEND } from "../main";
-import { Meme } from "../models/meme";
+import { Meme } from "../models/models";
 import styles, { memeContainer } from "./styles.css";
 import { emit } from '@create-figma-plugin/utilities'
 
@@ -19,8 +19,8 @@ export class MemeContainer extends Component<any, any> {
   }
 
   sendMemeToFigma() {
+    const img = this.ref.current
     const imageToBytes = async (resolve: any, reject: any) => {
-      const img = this.ref.current
       const canvas = document.createElement('canvas');
       const context = canvas.getContext('2d');
       canvas.height = img.naturalHeight;
@@ -43,8 +43,10 @@ export class MemeContainer extends Component<any, any> {
     imageToBytes(
       (bytes: any) => {
         emit(EVENT_MEME_SEND, {
-          meme: this.props.meme,
-          bytes: bytes
+          name: this.props.meme.name,
+          bytes: bytes,
+          width: img.naturalWidth,
+          height: img.naturalHeight
         })
       },
       (error: any) => {
