@@ -1,12 +1,22 @@
 import { on, setRelaunchButton, showUI } from '@create-figma-plugin/utilities'
+import { ResizeWindowHandler } from './types'
 
 export const EVENT_MEME_SEND = 'event_meme_send'
 
 export default function () {
+  on<ResizeWindowHandler>(
+    'RESIZE_WINDOW',
+    function (windowSize: { width: number; height: number }) {
+      const { width, height } = windowSize
+      figma.ui.resize(width, height)
+    }
+  )
+
   showUI({
     width: 400,
     height: 500
   })
+  
   setRelaunchButton(figma.root, 'main')
 
   on(EVENT_MEME_SEND, (data) => {
