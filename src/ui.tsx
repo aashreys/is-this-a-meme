@@ -5,9 +5,9 @@ import {
   Textbox,
   useWindowResize
 } from '@create-figma-plugin/ui'
-import { useState } from 'preact/hooks'
 import { emit } from '@create-figma-plugin/utilities'
 import { Component, h, JSX } from 'preact'
+import { SearchContainer } from './ ui/search_container'
 import styles from './ ui/styles.css'
 import { UIContainer, UIState } from './ ui/ui_container'
 import { ImgFlip } from './meme_providers/imgflip'
@@ -33,11 +33,16 @@ class UI extends Component<any, any> {
   bindMethods() {
     this.fetchPopularMemes = this.fetchPopularMemes.bind(this)
     this.searchForMemes = this.searchForMemes.bind(this)
-    this.onSearchKeyDown = this.onSearchKeyDown.bind(this)
-    this.onSearchInput = this.onSearchInput.bind(this)
+    this.onSearchTrigger = this.onSearchTrigger.bind(this)
     this.onSearchClear = this.onSearchClear.bind(this)
     this.setMemes = this.setMemes.bind(this)
     this.setUIState = this.setUIState.bind(this)
+    this.onMemeLoadError = this.onMemeLoadError.bind(this)
+    this.getInternetStatus = this.getInternetStatus.bind(this)
+  }
+
+  getInternetStatus(): boolean {
+    return window.navigator.onLine
   }
 
   fetchPopularMemes() {
@@ -58,30 +63,6 @@ class UI extends Component<any, any> {
     })
   }
 
-  onSearchKeyDown(input: any) {    
-    if (input.key === 'Enter') {
-      if (this.state.query.length > 0) {
-        console.log('searching for: ' + this.state.query)
-        this.searchForMemes(this.state.query)
-      } 
-      else {
-        console.log('cleared search, displaying popular memes')
-        this.setMemes(this.popularMemes)
-      }
-    }
-  }
-
-  onSearchInput(event: JSX.TargetedEvent<HTMLInputElement>) {
-    this.setState(prevState => ({
-      ...prevState,
-      query: event.currentTarget.value
-    }))
-  }
-
-  onSearchClear() {
-    this.setMemes(this.popularMemes)
-  }
-
   setMemes(memes: Meme[]) {
     this.setState(prevState => ({
       ...prevState,
@@ -97,20 +78,31 @@ class UI extends Component<any, any> {
     }))
   }
 
+  onSearchTrigger(query: string) {
+    this.searchForMemes(query)
+  }
+
+  onSearchClear() {
+    this.setMemes(this.popularMemes)
+  }
+
+  onMemeLoadError(meme: Meme) {
+    this.setMemes(this.state.memes.filter((element: Meme) => {return element !== meme}))
+  }
+
   render(props: any, state: any) {
     return (
       <Container>
-        <div class={styles.searchContainer} >
-          <Textbox 
-            icon={<IconSearch32 />} 
-            placeholder="Search memes..." 
-            value={state.query}
-            onInput={this.onSearchInput}
-            onKeyDownCapture={this.onSearchKeyDown} 
-          />
-        </div>
+        <SearchContainer 
+          onSearchTrigger={this.onSearchTrigger}
+          onSearchClear={this.onSearchClear}
+        />
         <div class={styles.contentContainer} >
-          <UIContainer uiState={UIState.Memes} memes={state.memes} />
+          <UIContainer 
+            uiState={state.uiState} 
+            memes={state.memes} 
+            onMemeLoadError={this.onMemeLoadError}
+          />
         </div>
       </Container>
     )
@@ -137,4 +129,3 @@ function Plugin(props: any) {
 }
 
 export default render(Plugin)
-

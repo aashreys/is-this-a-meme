@@ -1,5 +1,5 @@
 .contentContainer {
-  margin-top: 50px
+  margin-top: 54px
 }
 
 .memeGrid {
@@ -27,10 +27,12 @@
 }
 
 .searchContainer {
-  display: block;
+  display: flex;
+  align-items:center;
   position: fixed;
-  padding: 12px;
-  padding: 12px;
+  height: 54px;
+  padding-right: 12px;
+  padding-left: 12px;
   top: 0px;
   left: 0px;
   right: 0px;

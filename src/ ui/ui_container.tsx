@@ -1,3 +1,4 @@
+import { Button, LoadingIndicator, MiddleAlign, Text } from "@create-figma-plugin/ui";
 import { Component, ComponentChild, h } from "preact";
 import { MemesGrid } from "./memes_grid";
 
@@ -11,16 +12,31 @@ export enum UIState {
 export class UIContainer extends Component<any, any> {
 
   render(props?: any, state?: Readonly<any>, context?: any): ComponentChild {
-    return this.getScreen(props.uiState, props.memes)
+    return this.getScreen.bind(this)(props.uiState, props.memes)
   }
 
   getScreen(uiState: UIState, memes: any): ComponentChild {
     switch (uiState) {
-      case UIState.NoMemesFound: return <text>No memes found</text>
-      case UIState.Loading: return <text>loading</text>
-      case UIState.NetworkError: return <text>can't find internet... how are you even using Figma right now?</text>
+
+      case UIState.NoMemesFound: {
+        return <MiddleAlign> 
+          <Text align="center">No memes found.<br/>Try searching for something else.</Text>
+          </MiddleAlign>
+      }
+
+      case UIState.Loading: {
+        return <MiddleAlign> <LoadingIndicator /> </MiddleAlign>
+      }
+
+      case UIState.NetworkError: {
+        return <MiddleAlign> 
+          <Text align="center">No internet connection detected.<br/>Try again later.</Text>
+          </MiddleAlign>
+      }
+      
       case UIState.Memes: 
-      default: return <MemesGrid memes={memes} />
+      default: return <MemesGrid memes={memes} onError={this.props.onMemeLoadError} />
     }
   }
+  
 }

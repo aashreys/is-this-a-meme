@@ -1,4 +1,3 @@
-import { resolve } from "node:path/win32";
 import { Component, createRef, h} from "preact";
 import { EVENT_MEME_SEND } from "../main";
 import { Meme } from "../models/models";
@@ -59,7 +58,15 @@ export class MemeContainer extends Component<any, any> {
     const meme: Meme = props.meme
     return (
       <div class={styles.memeContainer}>
-        <img ref={this.ref} class={styles.memeImg} crossOrigin="anonymous" src={meme.url} alt={meme.name} onClick={this.sendMemeToFigma} />
+        <img 
+          ref={this.ref} 
+          class={styles.memeImg} 
+          crossOrigin="anonymous" 
+          src={meme.url} 
+          alt={meme.name} 
+          onClick={this.sendMemeToFigma} 
+          onError={() => props.onError(meme)}
+        />
       </div>
     )
   }

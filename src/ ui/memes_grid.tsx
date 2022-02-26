@@ -10,9 +10,10 @@ export class MemesGrid extends Component<any, any> {
     return (
       <div class={styles.memeGrid}>
         {
-          memes?.map((meme) => ( <MemeContainer meme={meme} /> ))
+          memes?.map((meme) => ( <MemeContainer meme={meme} onError={this.props.onError} /> ))
         }
       </div>
     )
   }
+  
 }
