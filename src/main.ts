@@ -20,8 +20,8 @@ export default function () {
     width: 400,
     height: 500
   })
-  
-  setRelaunchButton(figma.root, 'main')
+
+  if(!('main' in figma.root.getRelaunchData())) setRelaunchButton(figma.root, 'main')
 
   on(EVENT_MEME_SEND, (data) => {
     const meme: FrameNode = createMeme(
