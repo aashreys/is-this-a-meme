@@ -12,18 +12,19 @@
 .memeContainer {
    display: block;
    aspect-ratio: 1;
+   border-radius: 2px;
+   border: 2px solid transparent;
 }
 
-.memeContainer :hover {
-  display: block;
-  aspect-ratio: 1;
-  background: #eaeaea;
+.memeContainer:hover  {
+  border: 2px solid #34a9f8;
 }
 
 .memeImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 2px;
 }
 
 .searchContainer {
@@ -38,4 +39,3 @@
   right: 0px;
   background: white;
 }
-
