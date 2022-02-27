@@ -1,9 +1,6 @@
 import {
   Container,
-  IconSearch32,
   render,
-  Textbox,
-  useWindowResize
 } from '@create-figma-plugin/ui'
 import { emit } from '@create-figma-plugin/utilities'
 import { Component, h, JSX } from 'preact'
@@ -83,7 +80,12 @@ class UI extends Component<any, any> {
   }
 
   onSearchClear() {
-    this.setMemes(this.popularMemes)
+    if (this.popularMemes.length > 0) {
+      this.setMemes(this.popularMemes)
+    } else {
+      this.fetchPopularMemes()
+    }
+    
   }
 
   onMemeLoadError(meme: Meme) {
@@ -93,12 +95,12 @@ class UI extends Component<any, any> {
   render(props: any, state: any) {
     return (
       <Container>
-        <SearchContainer 
+        <SearchContainer
           onSearchTrigger={this.onSearchTrigger}
           onSearchClear={this.onSearchClear}
         />
         <div class={styles.contentContainer} >
-          <UIContainer 
+          <UIContainer
             uiState={state.uiState} 
             memes={state.memes} 
             onMemeLoadError={this.onMemeLoadError}
@@ -111,18 +113,6 @@ class UI extends Component<any, any> {
 }
 
 function Plugin(props: any) {
-
-  function onWindowResize (windowSize: { width: number; height: number }) {
-    emit<ResizeWindowHandler>('RESIZE_WINDOW', windowSize)
-  }
-
-  useWindowResize(onWindowResize, {
-    minWidth: 240,
-    minHeight: 300,
-    maxWidth: 640,
-    maxHeight: 800,
-    resizeBehaviorOnDoubleClick: 'minimize'
-  })
 
   return ( <UI /> )
 

@@ -1,5 +1,4 @@
 import { on, setRelaunchButton, showUI } from '@create-figma-plugin/utilities'
-import { ResizeWindowHandler } from './types'
 
 export const EVENT_MEME_SEND = 'event_meme_send'
 
@@ -8,14 +7,6 @@ const TEXT_STROKE_SCALAR = 1 / 20
 const TEXT_MARGIN_SCALAR = 1 / 24
 
 export default function () {
-  on<ResizeWindowHandler>(
-    'RESIZE_WINDOW',
-    function (windowSize: { width: number; height: number }) {
-      const { width, height } = windowSize
-      figma.ui.resize(width, height)
-    }
-  )
-
   showUI({
     width: 400,
     height: 500
