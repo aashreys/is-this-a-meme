@@ -3,6 +3,10 @@ import { ResizeWindowHandler } from './types'
 
 export const EVENT_MEME_SEND = 'event_meme_send'
 
+const TEXT_SIZE_SCALAR = 1 / 20
+const TEXT_STROKE_SCALAR = 1 / 20
+const TEXT_MARGIN_SCALAR = 1 / 24
+
 export default function () {
   on<ResizeWindowHandler>(
     'RESIZE_WINDOW',
@@ -43,20 +47,21 @@ function createMeme(name: string, bytes: Uint8Array, width: number, height: numb
   memeRect.y = 0
 
   const impact: FontName = {family: 'Impact', style: 'Regular'}
-  const textSize = Math.ceil((width >= height ? width : height) / 24)
+  const textSize = Math.ceil((width >= height ? width : height) * TEXT_SIZE_SCALAR)
+  const strokeWeight = Math.ceil(textSize * TEXT_STROKE_SCALAR)
 
   figma.loadFontAsync(impact)
   .then(
     () => {
-      let firstLine = createText(impact, 'First Line', textSize)
+      let firstLine = createText(impact, 'First Line', textSize, strokeWeight)
       parent.appendChild(firstLine)
       firstLine.x = parent.width / 2 - (firstLine.width / 2)
-      firstLine.y = Math.round(parent.height / 24)
+      firstLine.y = Math.round(parent.height * TEXT_MARGIN_SCALAR)
 
-      let secondLine = createText(impact, 'Second Line', textSize)
+      let secondLine = createText(impact, 'Second Line', textSize, strokeWeight)
       parent.appendChild(secondLine)
       secondLine.x = parent.width / 2 - (secondLine.width / 2)
-      secondLine.y = parent.height - Math.round(parent.height / 24) - secondLine.height
+      secondLine.y = parent.height - Math.round(parent.height * TEXT_MARGIN_SCALAR) - secondLine.height
     }
   )
   return parent
@@ -78,7 +83,7 @@ function createMemeRect(bytes: Uint8Array, width: number, height: number): Recta
   return rect
 }
 
-function createText(font: FontName, text: string, size: number): TextNode {
+function createText(font: FontName, text: string, size: number, strokeWeight: number): TextNode {
   const textNode = figma.createText()
   textNode.fontName = font
   textNode.characters = text
@@ -98,7 +103,8 @@ function createText(font: FontName, text: string, size: number): TextNode {
       color: { r: 0, g: 0, b: 0 }
     }
   ]
-  textNode.strokeWeight = Math.ceil(size / 24)
+
+  textNode.strokeWeight = strokeWeight
 
   return textNode
 }
