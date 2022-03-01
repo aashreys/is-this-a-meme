@@ -80,6 +80,7 @@ function createText(font: FontName, text: string, size: number, strokeWeight: nu
   textNode.characters = text
   textNode.fontSize = size
   textNode.textCase = 'UPPER'
+  textNode.textAlignHorizontal = 'CENTER'
 
   textNode.fills = [
     {
