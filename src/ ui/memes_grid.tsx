@@ -8,7 +8,7 @@ export class MemesGrid extends Component<any, any> {
   render(props: any, state: any) {
     const memes: Meme[] = props.memes
     return (
-      <div class={styles.memeGrid}>
+      <div class={props.class}>
         {
           memes?.map((meme) => ( <MemeContainer meme={meme} onError={this.props.onError} /> ))
         }

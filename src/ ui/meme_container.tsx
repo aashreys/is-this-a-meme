@@ -1,5 +1,5 @@
 import { Component, createRef, h} from "preact";
-import { EVENT_MEME_SEND } from "../main";
+import { EVENT_MEME_CLICK } from "../main";
 import { Meme } from "../models/models";
 import styles, { memeContainer } from "./styles.css";
 import { emit } from '@create-figma-plugin/utilities'
@@ -41,8 +41,8 @@ export class MemeContainer extends Component<any, any> {
 
     imageToBytes(
       (bytes: any) => {
-        emit(EVENT_MEME_SEND, {
-          name: this.props.meme.name,
+        emit(EVENT_MEME_CLICK, {
+          meme: this.props.meme,
           bytes: bytes,
           width: img.naturalWidth,
           height: img.naturalHeight

@@ -1,9 +1,11 @@
-import { Button, LoadingIndicator, MiddleAlign, Text } from "@create-figma-plugin/ui";
-import { Component, ComponentChild, h } from "preact";
+import { LoadingIndicator, MiddleAlign, Stack, Text, VerticalSpace } from "@create-figma-plugin/ui";
+import { Component, ComponentChild, Fragment, h } from "preact";
 import { MemesGrid } from "./memes_grid";
+import styles from "./styles.css";
 
 export enum UIState {
-  Memes, // Used for both Popular Memes and Search Results
+  Home,
+  SearchResults,
   NoMemesFound, 
   Loading,
   NetworkError
@@ -12,10 +14,10 @@ export enum UIState {
 export class UIContainer extends Component<any, any> {
 
   render(props?: any, state?: Readonly<any>, context?: any): ComponentChild {
-    return this.getScreen.bind(this)(props.uiState, props.memes)
+    return this.getScreen.bind(this)(props.uiState)
   }
 
-  getScreen(uiState: UIState, memes: any): ComponentChild {
+  getScreen(uiState: UIState): ComponentChild {
     switch (uiState) {
 
       case UIState.NoMemesFound: {
@@ -34,9 +36,43 @@ export class UIContainer extends Component<any, any> {
           </MiddleAlign>
       }
       
-      case UIState.Memes: 
-      default: return <MemesGrid memes={memes} onError={this.props.onMemeLoadError} />
+      case UIState.Home: return this.getHomeLayout()
+
+      case UIState.SearchResults: return this.getSearchResultsLayout()
     }
+  }
+
+  getHomeLayout(): ComponentChild {
+    return (
+      <Fragment>
+        {
+          this.props.recentMemes.length > 0 &&
+          <Fragment>
+            <MemesGrid 
+              memes={this.props.recentMemes} 
+              class={styles.recentMemeGrid} 
+              onError={this.props.onMemeLoadError} 
+            />
+          </Fragment>
+        }
+        <VerticalSpace space="extraSmall" />
+        <MemesGrid 
+          memes={this.props.popularMemes} 
+          class={styles.memeGrid} 
+          onError={this.props.onMemeLoadError} 
+        />
+      </Fragment>
+    )
+  }
+
+  getSearchResultsLayout() {
+    return (
+      <MemesGrid 
+        memes={this.props.searchResultMemes}
+        class={styles.memeGrid} 
+        onError={this.props.onMemeLoadError}
+      />
+    )
   }
   
 }

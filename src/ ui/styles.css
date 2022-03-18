@@ -1,5 +1,17 @@
 .contentContainer {
-  margin-top: 54px
+  margin-top: 54px;
+  z-index: 0
+}
+
+.heading {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.recentMemeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 8px;
 }
 
 .memeGrid {
@@ -38,4 +50,5 @@
   left: 0px;
   right: 0px;
   background: white;
+  z-index: 1
 }

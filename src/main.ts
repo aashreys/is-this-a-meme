@@ -1,6 +1,9 @@
-import { on, setRelaunchButton, showUI } from '@create-figma-plugin/utilities'
+import { emit, on, setRelaunchButton, showUI } from '@create-figma-plugin/utilities'
+import { addRecentMeme, getRecentMemes } from './meme_providers/recent_memes'
 
-export const EVENT_MEME_SEND = 'event_meme_send'
+export const EVENT_MEME_CLICK = 'event_meme_click'
+export const EVENT_REQUEST_RECENTS = 'event_request_recents'
+export const EVENT_NEW_RECENTS = 'event_new_recents'
 
 const TEXT_SIZE_SCALAR = 1 / 20
 const TEXT_STROKE_SCALAR = 1 / 20
@@ -14,15 +17,31 @@ export default function () {
 
   if(!('main' in figma.root.getRelaunchData())) setRelaunchButton(figma.root, 'main')
 
-  on(EVENT_MEME_SEND, (data) => {
-    const meme: FrameNode = createMeme(
-      data.name,
-      data.bytes,
-      data.width,
-      data.height
-    )
-    meme.x = Math.round(figma.viewport.bounds.x + (figma.viewport.bounds.width / 2) - (meme.width / 2))
-    meme.y = Math.round(figma.viewport.bounds.y + (figma.viewport.bounds.height / 2) - (meme.height / 2))
+  on(EVENT_MEME_CLICK, (data) => processMemeClick(data))
+
+  on(EVENT_REQUEST_RECENTS, () => {
+    sendRecentMemesAsync()
+  }) 
+}
+
+function processMemeClick(data: any) {
+  const memeFrame: FrameNode = createMeme(
+    data.meme.name,
+    data.bytes,
+    data.width,
+    data.height
+  )
+  centerInViewport(memeFrame)
+  addRecentMeme(data.meme)
+  .then(() => {
+    sendRecentMemesAsync()
+  })
+}
+
+function sendRecentMemesAsync() {
+  getRecentMemes().then((memes) => {
+    if (memes === undefined) memes = []
+    emit(EVENT_NEW_RECENTS, memes)
   })
 }
 
@@ -99,4 +118,9 @@ function createText(font: FontName, text: string, size: number, strokeWeight: nu
   textNode.strokeWeight = strokeWeight
 
   return textNode
+}
+
+function centerInViewport(node: SceneNode) {
+  node.x = Math.round(figma.viewport.bounds.x + (figma.viewport.bounds.width / 2) - (node.width / 2))
+  node.y = Math.round(figma.viewport.bounds.y + (figma.viewport.bounds.height / 2) - (node.height / 2))
 }
