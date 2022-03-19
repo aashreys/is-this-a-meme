@@ -48,6 +48,7 @@ export class UIContainer extends Component<any, any> {
         {
           this.props.recentMemes.length > 0 &&
           <Fragment>
+            <VerticalSpace space="medium" />
             <MemesGrid 
               memes={this.props.recentMemes} 
               class={styles.recentMemeGrid} 
@@ -55,7 +56,7 @@ export class UIContainer extends Component<any, any> {
             />
           </Fragment>
         }
-        <VerticalSpace space="extraSmall" />
+        <VerticalSpace space="large" />
         <MemesGrid 
           memes={this.props.popularMemes} 
           class={styles.memeGrid} 

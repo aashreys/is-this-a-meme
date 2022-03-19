@@ -27,3 +27,7 @@ export async function addRecentMeme(meme: Meme) {
 
   return figma.clientStorage.setAsync(RECENT_MEME_KEY, memes)
 }
+
+export function clearRecentMemes() {
+  figma.clientStorage.deleteAsync(RECENT_MEME_KEY)
+}

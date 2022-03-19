@@ -42,6 +42,7 @@ class UI extends Component<any, any> {
     this.onSearchTrigger = this.onSearchTrigger.bind(this)
     this.onSearchClear = this.onSearchClear.bind(this)
     this.onMemeLoadError = this.onMemeLoadError.bind(this)
+    this.scrollToTop = this.scrollToTop.bind(this)
   }
 
   getInternetStatus(): boolean {
@@ -84,7 +85,7 @@ class UI extends Component<any, any> {
     this.setUIState(UIState.Loading)
     this.imgflip.searchMeme(query)
     .then((memes) => {
-      window.scrollTo(0, 0)
+      this.scrollToTop()
       if (memes.length > 0) this.setSearchResultMemes(memes)
       else this.setUIState(UIState.NoMemesFound)
     })
@@ -112,6 +113,7 @@ class UI extends Component<any, any> {
   onSearchClear() {
     this.setSearchResultMemes([])
     this.setUIState(UIState.Home)
+    this.scrollToTop()
     if (this.state.popularMemes.length === 0) {
       this.fetchPopularMemes()
     }
@@ -121,6 +123,10 @@ class UI extends Component<any, any> {
     this.setPopularMemes(this.state.popularMemes.filter((element: Meme) => {return element !== meme}))
     this.setSearchResultMemes(this.state.searchResultMemes.filter((element: Meme) => {return element !== meme}))
     this.setRecentMemes(this.state.recentMemes.filter((element: Meme) => {return element !== meme}))
+  }
+
+  scrollToTop() {
+    window.scrollTo(0, 0)
   }
 
   render(props: any, state: any) {
