@@ -63,7 +63,8 @@ export class MemeContainer extends Component<any, any> {
           class={styles.memeImg} 
           crossOrigin="anonymous" 
           src={meme.url} 
-          alt={meme.name} 
+          alt={meme.name}
+          draggable={false} 
           onClick={this.sendMemeToFigma} 
           onError={() => props.onError(meme)}
         />
