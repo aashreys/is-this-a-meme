@@ -67,11 +67,15 @@ function createMeme(name: string, bytes: Uint8Array, width: number, height: numb
       parent.appendChild(firstLine)
       firstLine.x = parent.width / 2 - (firstLine.width / 2)
       firstLine.y = Math.round(parent.height * TEXT_MARGIN_SCALAR)
+      firstLine.textAlignHorizontal = 'CENTER'
+      firstLine.textAlignVertical = 'TOP'
 
       let secondLine = createText(impact, 'Second Line', textSize, strokeWeight)
       parent.appendChild(secondLine)
       secondLine.x = parent.width / 2 - (secondLine.width / 2)
       secondLine.y = parent.height - Math.round(parent.height * TEXT_MARGIN_SCALAR) - secondLine.height
+      secondLine.textAlignHorizontal = 'CENTER'
+      secondLine.textAlignVertical = 'BOTTOM'
     }
   )
   return parent
