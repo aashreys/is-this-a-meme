@@ -21,7 +21,7 @@ export default function () {
 
   on(EVENT_REQUEST_RECENTS, () => {
     sendRecentMemesAsync()
-  }) 
+  })
 }
 
 function processMemeClick(data: any) {
@@ -55,6 +55,7 @@ function createMeme(name: string, bytes: Uint8Array, width: number, height: numb
   parent.appendChild(memeRect)
   memeRect.x = 0
   memeRect.y = 0
+  memeRect.constraints = { horizontal: 'SCALE', vertical: 'SCALE' }
 
   const impact: FontName = {family: 'Impact', style: 'Regular'}
   const textSize = Math.ceil((width >= height ? width : height) * TEXT_SIZE_SCALAR)
@@ -69,6 +70,7 @@ function createMeme(name: string, bytes: Uint8Array, width: number, height: numb
       firstLine.y = Math.round(parent.height * TEXT_MARGIN_SCALAR)
       firstLine.textAlignHorizontal = 'CENTER'
       firstLine.textAlignVertical = 'TOP'
+      firstLine.constraints = { horizontal: 'CENTER', vertical: 'MIN' }
 
       let secondLine = createText(impact, 'Second Line', textSize, strokeWeight)
       parent.appendChild(secondLine)
@@ -76,6 +78,7 @@ function createMeme(name: string, bytes: Uint8Array, width: number, height: numb
       secondLine.y = parent.height - Math.round(parent.height * TEXT_MARGIN_SCALAR) - secondLine.height
       secondLine.textAlignHorizontal = 'CENTER'
       secondLine.textAlignVertical = 'BOTTOM'
+      secondLine.constraints = { horizontal: 'CENTER', vertical: 'MAX' }
     }
   )
   return parent
@@ -89,7 +92,7 @@ function createMemeRect(bytes: Uint8Array, width: number, height: number): Recta
 
   const imagePaint: ImagePaint = {
     type: "IMAGE",
-    scaleMode: "FIT",
+    scaleMode: "FILL",
     imageHash: figma.createImage(bytes).hash
   }
   newFills.push(imagePaint)
